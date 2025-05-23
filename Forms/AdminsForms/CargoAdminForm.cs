@@ -1,4 +1,4 @@
-﻿using CCAPIapp.DTO;
+﻿using CCAPI.DTO;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -65,7 +65,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 return;
             }
 
-            var dto = new CreateCargoDto
+            var dto = new CargoDto
             {
                 Weight = txtWeight.Text,
                 Dimensions = txtDimensions.Text,
