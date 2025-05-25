@@ -1,5 +1,4 @@
-﻿using CCAPI.DTO;
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CCAPI.Controllers.CargosController;
+using CCAPI.DTO.defaultt;
 
 namespace CCAPIapp.Forms.AdminsForms
 {
