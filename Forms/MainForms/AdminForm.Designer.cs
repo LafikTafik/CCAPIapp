@@ -34,14 +34,15 @@
             btnVehicles = new Button();
             btnDrivers = new Button();
             label1 = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // btnClients
             // 
-            btnClients.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnClients.Location = new Point(12, 43);
+            btnClients.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnClients.Location = new Point(12, 73);
             btnClients.Name = "btnClients";
-            btnClients.Size = new Size(268, 54);
+            btnClients.Size = new Size(758, 54);
             btnClients.TabIndex = 0;
             btnClients.Text = "Клиенты";
             btnClients.UseVisualStyleBackColor = true;
@@ -49,10 +50,10 @@
             // 
             // btnOrders
             // 
-            btnOrders.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnOrders.Location = new Point(12, 103);
+            btnOrders.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnOrders.Location = new Point(12, 133);
             btnOrders.Name = "btnOrders";
-            btnOrders.Size = new Size(268, 54);
+            btnOrders.Size = new Size(758, 54);
             btnOrders.TabIndex = 1;
             btnOrders.Text = "Заказы";
             btnOrders.UseVisualStyleBackColor = true;
@@ -60,10 +61,10 @@
             // 
             // btnCargos
             // 
-            btnCargos.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnCargos.Location = new Point(12, 163);
+            btnCargos.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnCargos.Location = new Point(12, 193);
             btnCargos.Name = "btnCargos";
-            btnCargos.Size = new Size(268, 54);
+            btnCargos.Size = new Size(758, 54);
             btnCargos.TabIndex = 2;
             btnCargos.Text = "Грузы";
             btnCargos.UseVisualStyleBackColor = true;
@@ -71,10 +72,10 @@
             // 
             // btnVehicles
             // 
-            btnVehicles.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnVehicles.Location = new Point(12, 223);
+            btnVehicles.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnVehicles.Location = new Point(12, 253);
             btnVehicles.Name = "btnVehicles";
-            btnVehicles.Size = new Size(268, 54);
+            btnVehicles.Size = new Size(758, 54);
             btnVehicles.TabIndex = 3;
             btnVehicles.Text = "Транспорт";
             btnVehicles.UseVisualStyleBackColor = true;
@@ -82,29 +83,43 @@
             // 
             // btnDrivers
             // 
-            btnDrivers.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnDrivers.Location = new Point(12, 283);
+            btnDrivers.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnDrivers.Location = new Point(12, 313);
             btnDrivers.Name = "btnDrivers";
-            btnDrivers.Size = new Size(268, 54);
+            btnDrivers.Size = new Size(758, 54);
             btnDrivers.TabIndex = 4;
             btnDrivers.Text = "Водители";
             btnDrivers.UseVisualStyleBackColor = true;
+            btnDrivers.Click += btnDrivers_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI Semibold", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            label1.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 178);
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new Size(268, 31);
+            label1.Size = new Size(364, 41);
             label1.TabIndex = 5;
             label1.Text = "Редактировать данные:";
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.Red;
+            button1.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            button1.Location = new Point(12, 483);
+            button1.Name = "button1";
+            button1.Size = new Size(758, 58);
+            button1.TabIndex = 6;
+            button1.Text = "Выход";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // AdminForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(782, 553);
+            Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(btnDrivers);
             Controls.Add(btnVehicles);
@@ -113,6 +128,7 @@
             Controls.Add(btnClients);
             Name = "AdminForm";
             Text = "AdminForm";
+            FormClosed += AdminForm_FormClosed;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -125,5 +141,6 @@
         private Button btnVehicles;
         private Button btnDrivers;
         private Label label1;
+        private Button button1;
     }
 }

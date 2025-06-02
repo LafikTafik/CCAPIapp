@@ -12,46 +12,29 @@ using System.Threading.Tasks;
 using CCAPI.DTO.defaultt;
 using CCAPI.DTO.deleted;
 using System.Windows.Forms;
+using CCAPIapp.Services;
+using CCAPIapp.Forms.DelForms;
 namespace CCAPIapp.Forms.AdminsForms
 {
     public partial class ClientAdminForm : Form
     {
+        private readonly ApiService<ClientDto> _api = new ApiService<ClientDto>("clients");
+
         public ClientAdminForm()
         {
             InitializeComponent();
         }
-        private readonly HttpClient _client = new();
 
         private async Task LoadClientsAsync()
         {
-            var url = "https://localhost:7218/api/clients";
-
-            try
-            {
-                var clients = await _client.GetFromJsonAsync<List<ClientDto>>(url);
-
-                if (clients != null)
-                {
-                    dataGridViewClients.DataSource = clients;
-                }
-                else
-                {
-                    MessageBox.Show("Не удалось получить данные");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
-            }
+            var clients = await _api.GetAllAsync();
+            dataGridViewClients.DataSource = clients;
         }
 
         private async void btnAddClient_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtSurname.Text))
-            {
-                MessageBox.Show("Имя и фамилия обязательны");
+            if (!ValidateClientFields())
                 return;
-            }
 
             var client = new ClientDto
             {
@@ -62,17 +45,10 @@ namespace CCAPIapp.Forms.AdminsForms
                 Address = txtAddress.Text
             };
 
-            var json = JsonSerializer.Serialize(client);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = "https://localhost:7218/api/clients";
-
-            var response = await _client.PostAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await _api.CreateAsync(client))
             {
                 MessageBox.Show("Клиент успешно добавлен");
-                LoadClientsAsync();
+                await LoadClientsAsync();
             }
             else
             {
@@ -88,6 +64,9 @@ namespace CCAPIapp.Forms.AdminsForms
                 return;
             }
 
+            if (!ValidateClientFields())
+                return;
+
             var selectedRow = dataGridViewClients.SelectedRows[0];
             var originalClient = (ClientDto)selectedRow.DataBoundItem;
 
@@ -101,17 +80,10 @@ namespace CCAPIapp.Forms.AdminsForms
                 Address = txtAddress.Text
             };
 
-            var json = JsonSerializer.Serialize(updatedClient);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = $"https://localhost:7218/api/clients/{updatedClient.ID}";
-
-            var response = await _client.PutAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await _api.UpdateAsync(originalClient.ID, updatedClient))
             {
-                await LoadClientsAsync(); // обновляем таблицу
-                MessageBox.Show("Клиент успешно обновлён");
+                MessageBox.Show("Клиент обновлён");
+                await LoadClientsAsync();
             }
             else
             {
@@ -132,13 +104,10 @@ namespace CCAPIapp.Forms.AdminsForms
             var result = MessageBox.Show("Удалить этого клиента?", "Подтверждение", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                var url = $"https://localhost:7218/api/clients/{selectedId}";
-
-                var response = await _client.DeleteAsync(url);
-
-                if (response.IsSuccessStatusCode)
+                if (await _api.DeleteAsync(selectedId))
                 {
-                    await LoadClientsAsync(); // обновляем данные
+                    MessageBox.Show("Клиент успешно удалён");
+                    await LoadClientsAsync();
                 }
                 else
                 {
@@ -146,7 +115,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 }
             }
         }
-
 
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -176,6 +144,91 @@ namespace CCAPIapp.Forms.AdminsForms
                 txtEmail.Text = client.Email;
                 txtAddress.Text = client.Address;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var form = new DeletedClientsForm();
+            form.Show();
+        }
+
+        private async void btnRefresh_Click(object sender, EventArgs e)
+        {
+            await LoadClientsAsync();
+        }
+
+        private void ClientAdminForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+        private ErrorProvider errorProvider = new ErrorProvider();
+        private bool ValidateClientFields()
+        {
+            errorProvider.Clear();
+
+            bool isValid = true;
+
+            // Имя
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                errorProvider.SetError(txtName, "Имя обязательно");
+                isValid = false;
+            }
+            else if (txtName.Text.Length > 40)
+            {
+                errorProvider.SetError(txtName, "Не более 40 символов");
+                isValid = false;
+            }
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(txtName.Text, @"^[a-zA-Zа-яА-ЯёЁ]+$"))
+            {
+                errorProvider.SetError(txtName, "Только буквы");
+                isValid = false;
+            }
+
+            // Фамилия
+            if (string.IsNullOrWhiteSpace(txtSurname.Text))
+            {
+                errorProvider.SetError(txtSurname, "Фамилия обязательна");
+                isValid = false;
+            }
+            else if (txtSurname.Text.Length > 40)
+            {
+                errorProvider.SetError(txtSurname, "Не более 40 символов");
+                isValid = false;
+            }
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(txtSurname.Text, @"^[a-zA-Zа-яА-ЯёЁ]+$"))
+            {
+                errorProvider.SetError(txtSurname, "Только буквы");
+                isValid = false;
+            }
+
+            // ТЕЛЕФОН - обновлённая версия
+            string phone = txtPhone.Text.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "");
+
+            if (string.IsNullOrWhiteSpace(phone))
+            {
+                errorProvider.SetError(txtPhone, "Номер телефона обязателен");
+                isValid = false;
+            }
+            else if (phone.Length < 11 || phone.Length > 12)
+            {
+                errorProvider.SetError(txtPhone, "Должно быть 11 или 12 цифр");
+                isValid = false;
+            }
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(phone, @"^\d+$"))
+            {
+                errorProvider.SetError(txtPhone, "Только цифры");
+                isValid = false;
+            }
+
+            // Email
+            if (!txtEmail.Text.Contains("@") || !txtEmail.Text.Contains("."))
+            {
+                errorProvider.SetError(txtEmail, "Email должен содержать @ и .");
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }

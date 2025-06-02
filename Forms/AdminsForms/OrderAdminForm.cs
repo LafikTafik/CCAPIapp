@@ -1,100 +1,58 @@
-﻿using Microsoft.VisualBasic;
+﻿using CCAPI.DTO.defaultt;
+using CCAPI.DTO.deleted;
+using CCAPIapp.Services;
+using CCAPIapp.Forms.DelForms;
+
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using CCAPI.DTO.defaultt;
+
 namespace CCAPIapp.Forms.AdminsForms
 {
     public partial class OrderAdminForm : Form
     {
+        private readonly ApiService<OrderDto> _api = new ApiService<OrderDto>("orders");
 
         public OrderAdminForm()
         {
             InitializeComponent();
         }
-        private readonly HttpClient _client = new();
-
 
         private async Task LoadOrdersAsync()
         {
-            var url = "https://localhost:7218/api/order";
-
-            try
-            {
-                var orders = await _client.GetFromJsonAsync<List<OrderDto>>(url);
-                if (orders != null)
-                {
-                    dataGridViewOrders.DataSource = orders;
-                }
-                else
-                {
-                    MessageBox.Show("Не удалось получить данные");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
-            }
+            var orders = await _api.GetAllAsync();
+            dataGridViewOrders.DataSource = orders;
         }
 
-        private async void btnAddClient_Click(object sender, EventArgs e)
+        private async void btnAddOrder_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtIDClient.Text, out int idClient))
-            {
-                MessageBox.Show("Неверный ID клиента");
+            if (!ValidateOrderFields())
                 return;
-            }
 
-            if (cmbStatus.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите статус из списка");
-                return;
-            }
+            var price = decimal.Parse(txtPrice.Text);
+            var clientId = int.Parse(txtIDClient.Text);
 
-            if (!decimal.TryParse(txtPrice.Text, out decimal price))
+            var order = new OrderDto
             {
-                MessageBox.Show("Неверная сумма");
-                return;
-            }
-
-            var newOrder = new OrderDto
-            {
-                IDClient = idClient,
-                Status = cmbStatus.SelectedItem.ToString(),
+                Status = cmbStatus.SelectedItem?.ToString() ?? "Новый",
                 Price = price,
-                Date = dtpDate.Value
+                Date = dtpDate.Value,
+                IDClient = clientId
             };
 
-
-            var json = JsonSerializer.Serialize(newOrder);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = "https://localhost:7218/api/order";
-
-            var response = await _client.PostAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await _api.CreateAsync(order))
             {
                 MessageBox.Show("Заказ успешно добавлен");
-                await LoadOrdersAsync(); // обновляем таблицу
+                await LoadOrdersAsync();
             }
             else
             {
-                var errorText = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Ошибка при добавлении: {errorText}");
+                MessageBox.Show("Ошибка при добавлении заказа");
             }
         }
 
-        private async void btnEditClient_Click(object sender, EventArgs e)
+        private async void btnEditOrder_Click_1(object sender, EventArgs e)
         {
             if (dataGridViewOrders.SelectedRows.Count == 0)
             {
@@ -102,41 +60,25 @@ namespace CCAPIapp.Forms.AdminsForms
                 return;
             }
 
+            if (!ValidateOrderFields())
+                return;
+
             var selectedRow = dataGridViewOrders.SelectedRows[0];
             var originalOrder = (OrderDto)selectedRow.DataBoundItem;
-
-            if (!int.TryParse(txtIDClient.Text, out int idClient))
-            {
-                MessageBox.Show("Неверный ID клиента");
-                return;
-            }
-
-            if (!decimal.TryParse(txtPrice.Text, out decimal price))
-            {
-                MessageBox.Show("Неверная сумма заказа");
-                return;
-            }
 
             var updatedOrder = new OrderDto
             {
                 ID = originalOrder.ID,
-                IDClient = idClient,
-                Status = cmbStatus.SelectedItem?.ToString() ?? "Новый", // берём выбранный статус
-                Price = price,
-                Date = dtpDate.Value
+                Status = cmbStatus.SelectedItem?.ToString() ?? "Новый",
+                Price = decimal.Parse(txtPrice.Text),
+                Date = dtpDate.Value,
+                IDClient = int.Parse(txtIDClient.Text)
             };
 
-            var json = JsonSerializer.Serialize(updatedOrder);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = $"https://localhost:7218/api/order/{updatedOrder.ID}";
-
-            var response = await _client.PutAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await _api.UpdateAsync(originalOrder.ID, updatedOrder))
             {
-                await LoadOrdersAsync(); // обновляем таблицу
-                MessageBox.Show("Заказ обновлён");
+                MessageBox.Show("Заказ успешно обновлён");
+                await LoadOrdersAsync();
             }
             else
             {
@@ -144,7 +86,7 @@ namespace CCAPIapp.Forms.AdminsForms
             }
         }
 
-        private async void btnDeleteClient_Click(object sender, EventArgs e)
+        private async void btnDeleteOrder_Click_1(object sender, EventArgs e)
         {
             if (dataGridViewOrders.SelectedRows.Count == 0)
             {
@@ -154,24 +96,73 @@ namespace CCAPIapp.Forms.AdminsForms
 
             var selectedId = (int)dataGridViewOrders.SelectedRows[0].Cells["ID"].Value;
 
-            var url = $"https://localhost:7218/api/order/{selectedId}";
-            var response = await _client.DeleteAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            var result = MessageBox.Show("Удалить этот заказ?", "Подтверждение", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                await LoadOrdersAsync();
-            }
-            else
-            {
-                MessageBox.Show("Ошибка при удалении заказа");
+                if (await _api.DeleteAsync(selectedId))
+                {
+                    MessageBox.Show("Заказ успешно удалён");
+                    await LoadOrdersAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Не удалось удалить заказ");
+                }
             }
         }
-        private async void OrderAdminForm_Load_1(object sender, EventArgs e)
+
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
             await LoadOrdersAsync();
         }
 
+        private void btnViewDeleted_Click(object sender, EventArgs e)
+        {
+            var form = new DeletedOrdersForm();
+            form.Show();
+        }
+
         private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            if (this.Owner != null)
+            {
+                this.Owner.Show(); // показываем AdminForm
+            }
+        }
+
+        private async void OrderAdminForm_Load(object sender, EventArgs e)
+        {
+            await LoadOrdersAsync();
+        }
+
+        private void dataGridViewOrders_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewOrders.SelectedRows.Count > 0)
+            {
+                var selected = dataGridViewOrders.SelectedRows[0].DataBoundItem as OrderDto;
+                if (selected != null)
+                {
+                    cmbStatus.SelectedItem = selected.Status;
+                    txtPrice.Text = selected.Price?.ToString();
+                    dtpDate.Value = selected.Date ?? DateTime.Now;
+                    txtIDClient.Text = selected.IDClient.ToString();
+                }
+            }
+        }
+
+        private async void btnRefresh_Click_1(object sender, EventArgs e)
+        {
+            await LoadOrdersAsync();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var form = new DeletedOrdersForm();
+            form.Show();
+        }
+
+        private void btnExit_Click_1(object sender, EventArgs e)
         {
             if (this.Owner != null)
             {
@@ -181,21 +172,44 @@ namespace CCAPIapp.Forms.AdminsForms
             this.Hide();
         }
 
-        private void dataGridViewOrders_SelectionChanged(object sender, EventArgs e)
+        private async void OrderAdminForm_Load_1(object sender, EventArgs e)
         {
-            if (dataGridViewOrders.SelectedRows.Count > 0)
+            await LoadOrdersAsync();
+        }
+        private ErrorProvider errorProvider = new ErrorProvider();
+
+        private bool ValidateOrderFields()
+        {
+            errorProvider.Clear();
+            bool isValid = true;
+
+            // ID клиента
+            if (!int.TryParse(txtIDClient.Text, out var clientId))
             {
-                var selectedRow = dataGridViewOrders.SelectedRows[0];
-                var order = (OrderDto)selectedRow.DataBoundItem;
-
-                txtIDClient.Text = order.IDClient.ToString();
-                dtpDate.Value = order.Date ?? DateTime.Now;
-                txtPrice.Text = order.Price.ToString();
-
-                // Устанавливаем текущий статус в ComboBox
-                cmbStatus.SelectedItem = order.Status;
+                errorProvider.SetError(txtIDClient, "Должно быть целое число");
+                MessageBox.Show("Поле 'ID клиента' должно содержать только цифры", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtIDClient.Focus();
+                isValid = false;
             }
+
+            if (clientId <= 0)
+            {
+                errorProvider.SetError(txtIDClient, "ID клиента должен быть больше 0");
+                MessageBox.Show("ID клиента должен быть положительным числом", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtIDClient.Focus();
+                isValid = false;
+            }
+
+            // Цена
+            if (!decimal.TryParse(txtPrice.Text, out var price) || price < 0)
+            {
+                errorProvider.SetError(txtPrice, "Цена должна быть положительным числом или 0");
+                MessageBox.Show("Цена не может быть отрицательной", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtPrice.Focus();
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
-
 }

@@ -1,94 +1,63 @@
-﻿using Microsoft.VisualBasic;
+﻿using CCAPI.DTO.defaultt;
+using CCAPIapp.Services;
+using CCAPIapp.Forms.DelForms;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static CCAPI.Controllers.CargosController;
-using CCAPI.DTO.defaultt;
 
 namespace CCAPIapp.Forms.AdminsForms
 {
     public partial class CargoAdminForm : Form
     {
+        private readonly ApiService<CargoDto> _api = new ApiService<CargoDto>("cargos");
+
         public CargoAdminForm()
         {
             InitializeComponent();
         }
-        private readonly HttpClient _client = new();
 
         private async Task LoadCargosAsync()
         {
-            var url = "https://localhost:7218/api/Cargos";
-
             try
             {
-                var cargos = await _client.GetFromJsonAsync<List<CargoDto>>(url);
-                if (cargos != null && cargos.Count > 0)
+                var cargos = await _api.GetAllAsync();
+
+                if (cargos == null || !cargos.Any())
                 {
-                    dataGridViewCargos.DataSource = cargos;
+                    dataGridViewCargos.DataSource = null;
+                    MessageBox.Show("Нет активных грузов", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
-                else
-                {
-                    MessageBox.Show("Нет данных");
-                }
+
+                dataGridViewCargos.DataSource = cargos;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private async void CargoAdminForm_Load(object sender, EventArgs e)
-        {
-            await LoadCargosAsync();
         }
 
         private async void btnAddCargo_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtWeight.Text) ||
-                string.IsNullOrWhiteSpace(txtDimensions.Text))
-            {
-                MessageBox.Show("Поля 'Вес' и 'Размеры' обязательны");
+            if (!ValidateCargoFields())
                 return;
-            }
 
-            if (!int.TryParse(txtOrderID.Text, out int orderId))
+            var cargo = new CargoDto
             {
-                MessageBox.Show("Введите корректный ID заказа");
-                return;
-            }
-
-            var dto = new CargoDto
-            {
+                OrderID = int.TryParse(txtOrderID.Text, out var id) ? id : (int?)null,
                 Weight = txtWeight.Text,
                 Dimensions = txtDimensions.Text,
-                Descriptions = txtDescription.Text,
-                OrderID = orderId
+                Descriptions = txtDescription.Text
             };
 
-            var json = JsonSerializer.Serialize(dto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = "https://localhost:7218/api/Cargos";
-
-            var response = await _client.PostAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await _api.CreateAsync(cargo))
             {
                 MessageBox.Show("Груз успешно добавлен");
-                await LoadCargosAsync(); // обновляем таблицу
+                await LoadCargosAsync();
             }
             else
             {
-                var errorText = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Ошибка при добавлении: {errorText}");
+                MessageBox.Show("Ошибка при добавлении груза");
             }
         }
 
@@ -100,39 +69,29 @@ namespace CCAPIapp.Forms.AdminsForms
                 return;
             }
 
-            var selectedRow = dataGridViewCargos.SelectedRows[0];
-            var originalCargo = (CargoDto)selectedRow.DataBoundItem;
-
-            if (!int.TryParse(txtOrderID.Text, out int orderId))
-            {
-                MessageBox.Show("Введите корректный OrderID");
+            if (!ValidateCargoFields())
                 return;
-            }
 
-            var dto = new CargoDto
+            var selectedRow = dataGridViewCargos.SelectedRows[0];
+            var original = (CargoDto)selectedRow.DataBoundItem;
+
+            var updated = new CargoDto
             {
+                ID = original.ID,
+                OrderID = int.TryParse(txtOrderID.Text, out var id) ? id : original.OrderID,
                 Weight = txtWeight.Text,
                 Dimensions = txtDimensions.Text,
-                Descriptions = txtDescription.Text,
-                OrderID = orderId
+                Descriptions = txtDescription.Text
             };
 
-            var json = JsonSerializer.Serialize(dto);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var url = $"https://localhost:7218/api/Cargos/{originalCargo.ID}";
-
-            var response = await _client.PutAsync(url, content);
-
-            if (response.IsSuccessStatusCode)
+            if (await _api.UpdateAsync(original.ID, updated))
             {
-                MessageBox.Show("Груз обновлён");
-                await LoadCargosAsync(); // обновляем таблицу
+                MessageBox.Show("Груз успешно обновлён");
+                await LoadCargosAsync();
             }
             else
             {
-                var errorText = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Ошибка при обновлении: {errorText}");
+                MessageBox.Show("Ошибка при обновлении груза");
             }
         }
 
@@ -149,11 +108,9 @@ namespace CCAPIapp.Forms.AdminsForms
             var result = MessageBox.Show("Удалить этот груз?", "Подтверждение", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                var url = $"https://localhost:7218/api/Cargos/{selectedId}";
-                var response = await _client.DeleteAsync(url);
-
-                if (response.IsSuccessStatusCode)
+                if (await _api.DeleteAsync(selectedId))
                 {
+                    MessageBox.Show("Груз помечен как удалённый");
                     await LoadCargosAsync();
                 }
                 else
@@ -163,39 +120,83 @@ namespace CCAPIapp.Forms.AdminsForms
             }
         }
 
-        private void dataGridViewCargos_SelectionChanged(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCargos.SelectedRows.Count > 0)
-            {
-                var selectedRow = dataGridViewCargos.SelectedRows[0];
-                var cargo = (CargoDto)selectedRow.DataBoundItem;
+            await LoadCargosAsync();
+        }
 
-                txtWeight.Text = cargo.Weight;
-                txtDimensions.Text = cargo.Dimensions;
-                txtDescription.Text = cargo.Descriptions;
-
-      
-                if (cargo.OrderID.HasValue)
-                {
-                    txtOrderID.Text = cargo.OrderID.Value.ToString();
-                }
-                else
-                {
-                    txtOrderID.Clear(); 
-                }
-            }
+        private void btnViewDeleted_Click(object sender, EventArgs e)
+        {
+            var form = new DeletedCargosForm();
+            form.ShowDialog();
+            LoadCargosAsync();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
+            this.Hide();
             if (this.Owner != null)
             {
-                this.Owner.Show(); // показываем AdminForm
+                this.Owner.Show();
+            }
+        }
+
+        private async void CargoAdminForm_Load(object sender, EventArgs e)
+        {
+            await LoadCargosAsync();
+        }
+
+        private void dataGridViewCargos_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewCargos.SelectedRows.Count > 0)
+            {
+                var selected = (CargoDto)dataGridViewCargos.SelectedRows[0].DataBoundItem;
+                txtOrderID.Text = selected.OrderID?.ToString() ?? string.Empty;
+                txtWeight.Text = selected.Weight;
+                txtDimensions.Text = selected.Dimensions;
+                txtDescription.Text = selected.Descriptions;
+            }
+        }
+        private ErrorProvider errorProvider = new ErrorProvider();
+
+        private bool ValidateCargoFields()
+        {
+            errorProvider.Clear(); // Очистка предыдущих ошибок
+            bool isValid = true;
+
+            // ID Заказа (необязательное поле)
+            if (txtOrderID.Text.Trim().Length > 0 &&
+                (!int.TryParse(txtOrderID.Text, out var orderId) || orderId <= 0))
+            {
+                errorProvider.SetError(txtOrderID, "Должно быть положительным числом");
+                MessageBox.Show("Поле 'ID заказа' должно содержать положительное число", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtOrderID.Focus();
+                isValid = false;
             }
 
-            this.Hide();
+            // Вес груза — должен быть числом > 0
+            if (!decimal.TryParse(txtWeight.Text, out var weight) || weight <= 0)
+            {
+                errorProvider.SetError(txtWeight, "Вес должен быть положительным числом");
+                MessageBox.Show("Поле 'Вес' должно содержать положительное число", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtWeight.Focus();
+                isValid = false;
+            }
+
+            // Габариты — формат: "100*200*300"
+            var dimensions = txtDimensions.Text.Replace(" ", "");
+
+            var parts = dimensions.Split('*');
+
+            if (parts.Length != 3 || !parts.All(p => decimal.TryParse(p, out _)))
+            {
+                errorProvider.SetError(txtDimensions, "Формат: 100*200*300 (только числа)");
+                MessageBox.Show("Поле 'Габариты' должно быть в формате: 100*200*300", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtDimensions.Focus();
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }
-
-

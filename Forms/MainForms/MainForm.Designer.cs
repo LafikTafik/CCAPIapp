@@ -47,11 +47,11 @@
             // rbAdmin
             // 
             rbAdmin.AutoSize = true;
-            rbAdmin.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            rbAdmin.Font = new Font("Segoe UI", 36F, FontStyle.Regular, GraphicsUnit.Point, 204);
             rbAdmin.ForeColor = Color.Black;
             rbAdmin.Location = new Point(12, 53);
             rbAdmin.Name = "rbAdmin";
-            rbAdmin.Size = new Size(236, 42);
+            rbAdmin.Size = new Size(489, 85);
             rbAdmin.TabIndex = 1;
             rbAdmin.TabStop = true;
             rbAdmin.Text = "Администратор";
@@ -60,10 +60,10 @@
             // rbUser
             // 
             rbUser.AutoSize = true;
-            rbUser.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            rbUser.Location = new Point(12, 101);
+            rbUser.Font = new Font("Segoe UI", 36F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            rbUser.Location = new Point(12, 144);
             rbUser.Name = "rbUser";
-            rbUser.Size = new Size(215, 42);
+            rbUser.Size = new Size(439, 85);
             rbUser.TabIndex = 2;
             rbUser.TabStop = true;
             rbUser.Text = "Пользователь";
@@ -72,9 +72,9 @@
             // btnLogin
             // 
             btnLogin.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnLogin.Location = new Point(12, 149);
+            btnLogin.Location = new Point(18, 234);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(293, 50);
+            btnLogin.Size = new Size(489, 84);
             btnLogin.TabIndex = 3;
             btnLogin.Text = "Войти";
             btnLogin.UseVisualStyleBackColor = true;
@@ -84,7 +84,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(519, 330);
             Controls.Add(btnLogin);
             Controls.Add(rbUser);
             Controls.Add(rbAdmin);
