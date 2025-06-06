@@ -57,12 +57,12 @@ namespace CCAPIapp.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (this.Owner != null)
-            {
-                this.Owner.Show();
-            }
-
-            this.Hide();
+            //if (this.Owner != null)
+            //{
+            //    this.Owner.Show();
+            //}
+            //this.Hide();
+            Application.Exit();
         }
 
         private void btnDrivers_Click(object sender, EventArgs e)

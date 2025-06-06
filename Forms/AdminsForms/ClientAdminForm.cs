@@ -64,6 +64,12 @@ namespace CCAPIapp.Forms.AdminsForms
                 return;
             }
 
+            var confirm = MessageBox.Show("Вы уверены, что хотите редактировать данные?", "Подтверждение", MessageBoxButtons.YesNo);
+            if (confirm != DialogResult.Yes)
+            {
+                return; 
+            }
+
             if (!ValidateClientFields())
                 return;
 
