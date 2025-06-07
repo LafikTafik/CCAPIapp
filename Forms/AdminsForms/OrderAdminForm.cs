@@ -2,7 +2,6 @@
 using CCAPI.DTO.deleted;
 using CCAPIapp.Services;
 using CCAPIapp.Forms.DelForms;
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +12,9 @@ namespace CCAPIapp.Forms.AdminsForms
     public partial class OrderAdminForm : Form
     {
         private readonly ApiService<OrderDto> _api = new ApiService<OrderDto>("orders");
+        private readonly ApiService<CargoDto> _cargoApi = new ApiService<CargoDto>("cargos");
+        private readonly ApiService<CargoOrdersDto> _cargoOrderApi = new ApiService<CargoOrdersDto>("cargoorders");
+       
 
         public OrderAdminForm()
         {
@@ -23,6 +25,7 @@ namespace CCAPIapp.Forms.AdminsForms
         {
             var orders = await _api.GetAllAsync();
             dataGridViewOrders.DataSource = orders;
+            await LoadDataAsync();
         }
 
         private async void btnAddOrder_Click(object sender, EventArgs e)
@@ -38,7 +41,8 @@ namespace CCAPIapp.Forms.AdminsForms
                 Status = cmbStatus.SelectedItem?.ToString() ?? "Новый",
                 Price = price,
                 Date = dtpDate.Value,
-                IDClient = clientId
+                IDClient = clientId,
+                TransId = int.Parse(txtTransid.Text)
             };
 
             if (await _api.CreateAsync(order))
@@ -51,6 +55,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 MessageBox.Show("Ошибка при добавлении заказа");
             }
         }
+
 
         private async void btnEditOrder_Click_1(object sender, EventArgs e)
         {
@@ -78,7 +83,8 @@ namespace CCAPIapp.Forms.AdminsForms
                 Status = cmbStatus.SelectedItem?.ToString() ?? "Новый",
                 Price = decimal.Parse(txtPrice.Text),
                 Date = dtpDate.Value,
-                IDClient = int.Parse(txtIDClient.Text)
+                IDClient = int.Parse(txtIDClient.Text),
+                TransId = int.Parse(txtTransid.Text)
             };
 
             if (await _api.UpdateAsync(originalOrder.ID, updatedOrder))
@@ -153,6 +159,7 @@ namespace CCAPIapp.Forms.AdminsForms
                     txtPrice.Text = selected.Price?.ToString();
                     dtpDate.Value = selected.Date ?? DateTime.Now;
                     txtIDClient.Text = selected.IDClient.ToString();
+                    txtTransid.Text = selected.TransId.ToString();
                 }
             }
         }
@@ -216,6 +223,57 @@ namespace CCAPIapp.Forms.AdminsForms
             }
 
             return isValid;
+        }
+        private async Task LoadDataAsync()
+        {
+            var cargos = await _cargoApi.GetAllAsync();
+
+            var displayCargos = cargos.Select(c => new
+            {
+                c.ID,
+                DisplayText = $"Груз #{c.ID} ({c.Descriptions})"
+            }).ToList();
+
+            cmbCargos.DataSource = displayCargos;
+            cmbCargos.DisplayMember = "DisplayText";
+            cmbCargos.ValueMember = "ID";
+        }
+        private async void btnAddCargoToOrder_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewOrders.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите заказ в таблице");
+                return;
+            }
+
+            var selectedOrderId = Convert.ToInt32(dataGridViewOrders.SelectedRows[0].Cells["ID"].Value);
+            var selectedCargoId = (int)cmbCargos.SelectedValue;
+
+            var dto = new CargoOrdersDto
+            {
+                OrderID = selectedOrderId,
+                CargoID = selectedCargoId
+            };
+
+            if (await _cargoOrderApi.CreateAsync(dto))
+            {
+                MessageBox.Show("Груз успешно добавлен к заказу");
+                await LoadCargosForOrder(selectedOrderId); // обновляем список грузов
+            }
+            else
+            {
+                MessageBox.Show("Ошибка при добавлении груза к заказу");
+            }
+        }
+        private async Task LoadCargosForOrder(int orderId)
+        {
+            var items = await _cargoOrderApi.GetByOrderIdAsync(orderId);
+
+            // Здесь можно обновить другой DataGridView или просто вывести сообщение
+            foreach (var item in items)
+            {
+                Console.WriteLine($"Заказ {item.OrderID} связан с грузом {item.CargoID}");
+            }
         }
     }
 }

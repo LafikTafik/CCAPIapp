@@ -49,6 +49,7 @@ namespace CCAPIapp.Forms.AdminsForms
             {
                 MessageBox.Show("Клиент успешно добавлен");
                 await LoadClientsAsync();
+                ClearForm();
             }
             else
             {
@@ -235,6 +236,16 @@ namespace CCAPIapp.Forms.AdminsForms
             }
 
             return isValid;
+        }
+        private void ClearForm()
+        {
+            txtName.Clear();
+            txtSurname.Clear();
+            txtPhone.Clear();
+            txtEmail.Clear();
+            txtAddress.Clear();
+
+            errorProvider.Clear(); // очищаем ошибки валидации
         }
     }
 }

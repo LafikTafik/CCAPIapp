@@ -4,6 +4,7 @@ using CCAPIapp.Forms.DelForms;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace CCAPIapp.Forms.AdminsForms
 {
@@ -44,6 +45,7 @@ namespace CCAPIapp.Forms.AdminsForms
 
             var dto = new VehicleDto
             {
+                TransportationCompanyId = int.Parse(txtCompanyId.Text),
                 Type = txtType.Text,
                 Capacity = txtCapacity.Text,
                 VehicleNum = txtVehicleNum.Text,
@@ -84,6 +86,7 @@ namespace CCAPIapp.Forms.AdminsForms
             var updated = new VehicleDto
             {
                 ID = original.ID,
+                TransportationCompanyId = int.Parse(txtCompanyId.Text),
                 Type = txtType.Text,
                 Capacity = txtCapacity.Text,
                 VehicleNum = txtVehicleNum.Text,
@@ -153,25 +156,12 @@ namespace CCAPIapp.Forms.AdminsForms
             await LoadVehiclesAsync();
         }
 
-        private void dataGridViewVehicles_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dataGridViewVehicles.SelectedRows.Count > 0)
-            {
-                var selected = (VehicleDto)dataGridViewVehicles.SelectedRows[0].DataBoundItem;
-
-                txtType.Text = selected.Type;
-                txtCapacity.Text = selected.Capacity;
-                txtVehicleNum.Text = selected.VehicleNum;
-                txtDriverId.Text = selected.DriverId.ToString();
-            }
-        }
-
         private void dataGridViewVehicles_SelectionChanged_1(object sender, EventArgs e)
         {
             if (dataGridViewVehicles.SelectedRows.Count > 0)
             {
                 var selected = (VehicleDto)dataGridViewVehicles.SelectedRows[0].DataBoundItem;
-
+                txtCompanyId.Text = selected.TransportationCompanyId.ToString();
                 txtType.Text = selected.Type;
                 txtCapacity.Text = selected.Capacity;
                 txtVehicleNum.Text = selected.VehicleNum;
@@ -215,10 +205,7 @@ namespace CCAPIapp.Forms.AdminsForms
             }
             else
             {
-                // Регулярное выражение: 
-                // ^[A-Za-zА-яЁё] — первая буква
-                // \d{3} — три цифры
-                // [A-Za-zА-яЁё]{2}$ — две буквы в конце
+
                 var regex = new System.Text.RegularExpressions.Regex(@"^[A-Za-zА-Яа-яЁё]\d{3}[A-Za-zА-Яа-яЁё]{2}$",
                     System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 

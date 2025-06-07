@@ -23,13 +23,11 @@ namespace CCAPIapp.Forms
             {
                 var adminForm = new AdminForm();
                 adminForm.Show();
-                this.Hide();
             }
             else if (rbUser.Checked)
             {
                 var userForm = new UserForm();
                 userForm.Show();
-                this.Hide();
             }
             else
             {

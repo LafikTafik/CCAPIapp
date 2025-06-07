@@ -40,9 +40,9 @@
             label1.Font = new Font("Segoe UI Semibold", 18F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
-            label1.Size = new Size(293, 41);
+            label1.Size = new Size(302, 41);
             label1.TabIndex = 0;
-            label1.Text = "Выберите профиль";
+            label1.Text = "Выберите действие:";
             // 
             // rbAdmin
             // 
@@ -51,10 +51,10 @@
             rbAdmin.ForeColor = Color.Black;
             rbAdmin.Location = new Point(12, 53);
             rbAdmin.Name = "rbAdmin";
-            rbAdmin.Size = new Size(489, 85);
+            rbAdmin.Size = new Size(687, 85);
             rbAdmin.TabIndex = 1;
             rbAdmin.TabStop = true;
-            rbAdmin.Text = "Администратор";
+            rbAdmin.Text = "Редактировать данные";
             rbAdmin.UseVisualStyleBackColor = true;
             // 
             // rbUser
@@ -63,20 +63,20 @@
             rbUser.Font = new Font("Segoe UI", 36F, FontStyle.Regular, GraphicsUnit.Point, 204);
             rbUser.Location = new Point(12, 144);
             rbUser.Name = "rbUser";
-            rbUser.Size = new Size(439, 85);
+            rbUser.Size = new Size(506, 85);
             rbUser.TabIndex = 2;
             rbUser.TabStop = true;
-            rbUser.Text = "Пользователь";
+            rbUser.Text = "Оформить заказ";
             rbUser.UseVisualStyleBackColor = true;
             // 
             // btnLogin
             // 
-            btnLogin.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnLogin.Font = new Font("Segoe UI", 36F, FontStyle.Regular, GraphicsUnit.Point, 204);
             btnLogin.Location = new Point(18, 234);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(489, 84);
+            btnLogin.Size = new Size(681, 84);
             btnLogin.TabIndex = 3;
-            btnLogin.Text = "Войти";
+            btnLogin.Text = "Перейти";
             btnLogin.UseVisualStyleBackColor = true;
             btnLogin.Click += btnLogin_Click;
             // 
@@ -84,7 +84,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(519, 330);
+            ClientSize = new Size(709, 330);
             Controls.Add(btnLogin);
             Controls.Add(rbUser);
             Controls.Add(rbAdmin);

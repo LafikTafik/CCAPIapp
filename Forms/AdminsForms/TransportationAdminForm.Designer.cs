@@ -1,6 +1,6 @@
 ﻿namespace CCAPIapp.Forms.AdminsForms
 {
-    partial class VehicleAdminForm
+    partial class TransportationAdminForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,24 +32,24 @@
             label7 = new Label();
             label6 = new Label();
             button1 = new Button();
+            label5 = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
-            lblType = new Label();
-            txtDriverId = new TextBox();
-            txtVehicleNum = new TextBox();
-            txtCapacity = new TextBox();
-            txtType = new TextBox();
+            txtEndPoint = new TextBox();
+            txtStartPoint = new TextBox();
+            txtVehicleId = new TextBox();
+            txtCargoId = new TextBox();
             btnExit = new Button();
             btnDeleteClient = new Button();
             btnEditClient = new Button();
             btnAddClient = new Button();
-            dataGridViewVehicles = new DataGridView();
-            label1 = new Label();
-            txtCompanyId = new TextBox();
+            dataGridViewTransportations = new DataGridView();
+            btnAddCargoToOrder = new Button();
+            cmbCompanies = new ComboBox();
             panel1 = new Panel();
             panel2 = new Panel();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewVehicles).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTransportations).BeginInit();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
@@ -59,7 +59,7 @@
             btnRefresh.BackColor = Color.LightSteelBlue;
             btnRefresh.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             btnRefresh.ForeColor = SystemColors.ActiveCaptionText;
-            btnRefresh.Location = new Point(15, 272);
+            btnRefresh.Location = new Point(3, 272);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.Size = new Size(523, 71);
             btnRefresh.TabIndex = 37;
@@ -71,7 +71,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label7.Location = new Point(15, 0);
+            label7.Location = new Point(3, 0);
             label7.Name = "label7";
             label7.Size = new Size(311, 38);
             label7.TabIndex = 36;
@@ -81,99 +81,99 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            label6.Location = new Point(3, 0);
+            label6.Location = new Point(0, 0);
             label6.Name = "label6";
-            label6.Size = new Size(253, 38);
+            label6.Size = new Size(308, 38);
             label6.TabIndex = 35;
-            label6.Text = "Данные клиента:";
+            label6.Text = "Данные о перевозке:";
             // 
             // button1
             // 
             button1.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            button1.Location = new Point(15, 349);
+            button1.Location = new Point(3, 349);
             button1.Name = "button1";
             button1.Size = new Size(523, 71);
             button1.TabIndex = 34;
             button1.Text = "Удалённые записи\r\n";
             button1.Click += btnViewDeleted_Click;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 16.2F);
+            label5.Location = new Point(3, 161);
+            label5.Name = "label5";
+            label5.Size = new Size(219, 38);
+            label5.TabIndex = 33;
+            label5.Text = "Конечная точка";
+            // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 16.2F);
-            label4.Location = new Point(3, 201);
+            label4.Location = new Point(3, 121);
             label4.Name = "label4";
-            label4.Size = new Size(169, 38);
+            label4.Size = new Size(233, 38);
             label4.TabIndex = 32;
-            label4.Text = "ID водителя";
+            label4.Text = "Начальная точка";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 16.2F);
-            label3.Location = new Point(3, 161);
+            label3.Location = new Point(3, 81);
             label3.Name = "label3";
-            label3.Size = new Size(144, 38);
+            label3.Size = new Size(195, 38);
             label3.TabIndex = 31;
-            label3.Text = "Номер ТС";
+            label3.Text = "ID транспорта";
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 16.2F);
-            label2.Location = new Point(3, 121);
+            label2.Location = new Point(3, 41);
             label2.Name = "label2";
-            label2.Size = new Size(182, 38);
+            label2.Size = new Size(119, 38);
             label2.TabIndex = 30;
-            label2.Text = "Вместимость";
+            label2.Text = "ID груза";
             // 
-            // lblType
+            // txtEndPoint
             // 
-            lblType.AutoSize = true;
-            lblType.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            lblType.Location = new Point(3, 81);
-            lblType.Name = "lblType";
-            lblType.Size = new Size(215, 38);
-            lblType.TabIndex = 29;
-            lblType.Text = "Тип транспорта";
+            txtEndPoint.Font = new Font("Microsoft Sans Serif", 13.8F);
+            txtEndPoint.Location = new Point(244, 161);
+            txtEndPoint.Name = "txtEndPoint";
+            txtEndPoint.Size = new Size(282, 34);
+            txtEndPoint.TabIndex = 28;
             // 
-            // txtDriverId
+            // txtStartPoint
             // 
-            txtDriverId.Font = new Font("Microsoft Sans Serif", 13.8F);
-            txtDriverId.Location = new Point(244, 201);
-            txtDriverId.Name = "txtDriverId";
-            txtDriverId.Size = new Size(282, 34);
-            txtDriverId.TabIndex = 27;
+            txtStartPoint.Font = new Font("Microsoft Sans Serif", 13.8F);
+            txtStartPoint.Location = new Point(244, 121);
+            txtStartPoint.Name = "txtStartPoint";
+            txtStartPoint.Size = new Size(282, 34);
+            txtStartPoint.TabIndex = 27;
             // 
-            // txtVehicleNum
+            // txtVehicleId
             // 
-            txtVehicleNum.Font = new Font("Microsoft Sans Serif", 13.8F);
-            txtVehicleNum.Location = new Point(244, 161);
-            txtVehicleNum.Name = "txtVehicleNum";
-            txtVehicleNum.Size = new Size(282, 34);
-            txtVehicleNum.TabIndex = 26;
+            txtVehicleId.Font = new Font("Microsoft Sans Serif", 13.8F);
+            txtVehicleId.Location = new Point(244, 81);
+            txtVehicleId.Name = "txtVehicleId";
+            txtVehicleId.Size = new Size(282, 34);
+            txtVehicleId.TabIndex = 26;
             // 
-            // txtCapacity
+            // txtCargoId
             // 
-            txtCapacity.Font = new Font("Microsoft Sans Serif", 13.8F);
-            txtCapacity.Location = new Point(244, 121);
-            txtCapacity.Name = "txtCapacity";
-            txtCapacity.Size = new Size(282, 34);
-            txtCapacity.TabIndex = 25;
-            // 
-            // txtType
-            // 
-            txtType.Font = new Font("Microsoft Sans Serif", 13.8F);
-            txtType.Location = new Point(244, 81);
-            txtType.Name = "txtType";
-            txtType.Size = new Size(282, 34);
-            txtType.TabIndex = 24;
+            txtCargoId.Font = new Font("Microsoft Sans Serif", 13.8F);
+            txtCargoId.Location = new Point(244, 41);
+            txtCargoId.Name = "txtCargoId";
+            txtCargoId.Size = new Size(282, 34);
+            txtCargoId.TabIndex = 25;
             // 
             // btnExit
             // 
             btnExit.BackColor = Color.Red;
             btnExit.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            btnExit.Location = new Point(15, 426);
+            btnExit.Location = new Point(3, 426);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(523, 71);
             btnExit.TabIndex = 23;
@@ -184,7 +184,7 @@
             // btnDeleteClient
             // 
             btnDeleteClient.Font = new Font("Segoe UI", 16.2F);
-            btnDeleteClient.Location = new Point(15, 195);
+            btnDeleteClient.Location = new Point(3, 195);
             btnDeleteClient.Name = "btnDeleteClient";
             btnDeleteClient.Size = new Size(523, 71);
             btnDeleteClient.TabIndex = 22;
@@ -195,7 +195,7 @@
             // btnEditClient
             // 
             btnEditClient.Font = new Font("Segoe UI", 16.2F);
-            btnEditClient.Location = new Point(15, 118);
+            btnEditClient.Location = new Point(3, 118);
             btnEditClient.Name = "btnEditClient";
             btnEditClient.Size = new Size(523, 71);
             btnEditClient.TabIndex = 21;
@@ -206,42 +206,44 @@
             // btnAddClient
             // 
             btnAddClient.Font = new Font("Segoe UI", 16.2F);
-            btnAddClient.Location = new Point(15, 41);
+            btnAddClient.Location = new Point(3, 41);
             btnAddClient.Name = "btnAddClient";
             btnAddClient.Size = new Size(523, 71);
             btnAddClient.TabIndex = 20;
-            btnAddClient.Text = "Добавить запись о клиенте ";
+            btnAddClient.Text = "Добавить запись о перевозке";
             btnAddClient.UseVisualStyleBackColor = true;
             btnAddClient.Click += btnAdd_Click;
             // 
-            // dataGridViewVehicles
+            // dataGridViewTransportations
             // 
-            dataGridViewVehicles.Anchor = AnchorStyles.Top;
-            dataGridViewVehicles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewVehicles.Location = new Point(575, 11);
-            dataGridViewVehicles.Name = "dataGridViewVehicles";
-            dataGridViewVehicles.RowHeadersWidth = 51;
-            dataGridViewVehicles.Size = new Size(995, 829);
-            dataGridViewVehicles.TabIndex = 19;
-            dataGridViewVehicles.SelectionChanged += dataGridViewVehicles_SelectionChanged_1;
+            dataGridViewTransportations.Anchor = AnchorStyles.Top;
+            dataGridViewTransportations.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewTransportations.Location = new Point(566, 12);
+            dataGridViewTransportations.Name = "dataGridViewTransportations";
+            dataGridViewTransportations.RowHeadersWidth = 51;
+            dataGridViewTransportations.Size = new Size(1004, 829);
+            dataGridViewTransportations.TabIndex = 19;
+            dataGridViewTransportations.SelectionChanged += dataGridViewTransportations_SelectionChanged;
             // 
-            // label1
+            // btnAddCargoToOrder
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            label1.Location = new Point(3, 38);
-            label1.Name = "label1";
-            label1.Size = new Size(180, 38);
-            label1.TabIndex = 38;
-            label1.Text = "ID компании";
+            btnAddCargoToOrder.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            btnAddCargoToOrder.Location = new Point(3, 209);
+            btnAddCargoToOrder.Name = "btnAddCargoToOrder";
+            btnAddCargoToOrder.Size = new Size(233, 39);
+            btnAddCargoToOrder.TabIndex = 39;
+            btnAddCargoToOrder.Text = "Добавить связь с компанией";
+            btnAddCargoToOrder.UseVisualStyleBackColor = true;
+            btnAddCargoToOrder.Click += btnAddCompanyToTransportation_Click;
             // 
-            // txtCompanyId
+            // cmbCompanies
             // 
-            txtCompanyId.Font = new Font("Microsoft Sans Serif", 13.8F);
-            txtCompanyId.Location = new Point(244, 41);
-            txtCompanyId.Name = "txtCompanyId";
-            txtCompanyId.Size = new Size(282, 34);
-            txtCompanyId.TabIndex = 39;
+            cmbCompanies.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            cmbCompanies.FormattingEnabled = true;
+            cmbCompanies.Location = new Point(244, 209);
+            cmbCompanies.Name = "cmbCompanies";
+            cmbCompanies.Size = new Size(282, 39);
+            cmbCompanies.TabIndex = 38;
             // 
             // panel1
             // 
@@ -260,33 +262,33 @@
             // panel2
             // 
             panel2.Controls.Add(label6);
-            panel2.Controls.Add(txtType);
-            panel2.Controls.Add(txtCompanyId);
-            panel2.Controls.Add(txtCapacity);
-            panel2.Controls.Add(label1);
-            panel2.Controls.Add(txtVehicleNum);
-            panel2.Controls.Add(txtDriverId);
-            panel2.Controls.Add(label4);
-            panel2.Controls.Add(lblType);
-            panel2.Controls.Add(label3);
+            panel2.Controls.Add(txtCargoId);
+            panel2.Controls.Add(btnAddCargoToOrder);
+            panel2.Controls.Add(txtVehicleId);
+            panel2.Controls.Add(cmbCompanies);
+            panel2.Controls.Add(txtStartPoint);
+            panel2.Controls.Add(txtEndPoint);
+            panel2.Controls.Add(label5);
             panel2.Controls.Add(label2);
-            panel2.Location = new Point(12, 11);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(label3);
+            panel2.Location = new Point(12, 12);
             panel2.Name = "panel2";
-            panel2.Size = new Size(544, 246);
+            panel2.Size = new Size(544, 263);
             panel2.TabIndex = 41;
             // 
-            // VehicleAdminForm
+            // TransportationAdminForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1582, 853);
             Controls.Add(panel2);
             Controls.Add(panel1);
-            Controls.Add(dataGridViewVehicles);
-            Name = "VehicleAdminForm";
-            Text = "VehicleAdminForm";
-            Load += VehicleAdminForm_Load;
-            ((System.ComponentModel.ISupportInitialize)dataGridViewVehicles).EndInit();
+            Controls.Add(dataGridViewTransportations);
+            Name = "TransportationAdminForm";
+            Text = "TransportationAdminForm";
+            Load += TransportationAdminForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dataGridViewTransportations).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
@@ -300,21 +302,21 @@
         private Label label7;
         private Label label6;
         private Button button1;
+        private Label label5;
         private Label label4;
         private Label label3;
         private Label label2;
-        private Label lblType;
-        private TextBox txtDriverId;
-        private TextBox txtVehicleNum;
-        private TextBox txtCapacity;
-        private TextBox txtType;
+        private TextBox txtEndPoint;
+        private TextBox txtStartPoint;
+        private TextBox txtVehicleId;
+        private TextBox txtCargoId;
         private Button btnExit;
         private Button btnDeleteClient;
         private Button btnEditClient;
         private Button btnAddClient;
-        private DataGridView dataGridViewVehicles;
-        private Label label1;
-        private TextBox txtCompanyId;
+        private DataGridView dataGridViewTransportations;
+        private Button btnAddCargoToOrder;
+        private ComboBox cmbCompanies;
         private Panel panel1;
         private Panel panel2;
     }

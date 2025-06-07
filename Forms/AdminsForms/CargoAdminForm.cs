@@ -4,6 +4,7 @@ using CCAPIapp.Forms.DelForms;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace CCAPIapp.Forms.AdminsForms
 {
@@ -44,7 +45,6 @@ namespace CCAPIapp.Forms.AdminsForms
 
             var cargo = new CargoDto
             {
-                OrderID = int.TryParse(txtOrderID.Text, out var id) ? id : (int?)null,
                 Weight = txtWeight.Text,
                 Dimensions = txtDimensions.Text,
                 Descriptions = txtDescription.Text
@@ -54,11 +54,20 @@ namespace CCAPIapp.Forms.AdminsForms
             {
                 MessageBox.Show("Груз успешно добавлен");
                 await LoadCargosAsync();
+                ClearForm();
             }
             else
             {
                 MessageBox.Show("Ошибка при добавлении груза");
             }
+        }
+        private void ClearForm()
+        {
+            txtWeight.Clear();
+            txtDimensions.Clear();
+            txtDescription.Clear();
+
+            errorProvider.Clear(); // очищаем ошибки валидации
         }
 
         private async void btnEditCargo_Click(object sender, EventArgs e)
@@ -84,7 +93,6 @@ namespace CCAPIapp.Forms.AdminsForms
             var updated = new CargoDto
             {
                 ID = original.ID,
-                OrderID = int.TryParse(txtOrderID.Text, out var id) ? id : original.OrderID,
                 Weight = txtWeight.Text,
                 Dimensions = txtDimensions.Text,
                 Descriptions = txtDescription.Text
@@ -157,7 +165,6 @@ namespace CCAPIapp.Forms.AdminsForms
             if (dataGridViewCargos.SelectedRows.Count > 0)
             {
                 var selected = (CargoDto)dataGridViewCargos.SelectedRows[0].DataBoundItem;
-                txtOrderID.Text = selected.OrderID?.ToString() ?? string.Empty;
                 txtWeight.Text = selected.Weight;
                 txtDimensions.Text = selected.Dimensions;
                 txtDescription.Text = selected.Descriptions;
@@ -169,16 +176,6 @@ namespace CCAPIapp.Forms.AdminsForms
         {
             errorProvider.Clear(); // Очистка предыдущих ошибок
             bool isValid = true;
-
-            // ID Заказа (необязательное поле)
-            if (txtOrderID.Text.Trim().Length > 0 &&
-                (!int.TryParse(txtOrderID.Text, out var orderId) || orderId <= 0))
-            {
-                errorProvider.SetError(txtOrderID, "Должно быть положительным числом");
-                MessageBox.Show("Поле 'ID заказа' должно содержать положительное число", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtOrderID.Focus();
-                isValid = false;
-            }
 
             // Вес груза — должен быть числом > 0
             if (!decimal.TryParse(txtWeight.Text, out var weight) || weight <= 0)

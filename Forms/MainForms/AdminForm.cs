@@ -23,7 +23,6 @@ namespace CCAPIapp.Forms
             var clientAdminForm = new ClientAdminForm();
             clientAdminForm.Owner = this;
             clientAdminForm.Show();
-            this.Hide();
         }
 
         private void btnVehicles_Click(object sender, EventArgs e)
@@ -31,7 +30,6 @@ namespace CCAPIapp.Forms
             var vehicleAdminForm = new VehicleAdminForm();
             vehicleAdminForm.Owner = this;
             vehicleAdminForm.Show();
-            this.Hide();
         }
 
         private void btnOrders_Click(object sender, EventArgs e)
@@ -39,7 +37,6 @@ namespace CCAPIapp.Forms
             var orderAdminForm = new OrderAdminForm();
             orderAdminForm.Owner = this; // передаём текущую форму как Owner
             orderAdminForm.Show();
-            this.Hide();
         }
 
         private void btnCargos_Click(object sender, EventArgs e)
@@ -47,7 +44,6 @@ namespace CCAPIapp.Forms
             var сargoAdminForm = new CargoAdminForm();
             сargoAdminForm.Owner = this; // передаём текущую форму как Owner
             сargoAdminForm.Show();
-            this.Hide();
         }
 
         private void AdminForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -57,12 +53,7 @@ namespace CCAPIapp.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //if (this.Owner != null)
-            //{
-            //    this.Owner.Show();
-            //}
-            //this.Hide();
-            Application.Exit();
+            this.Close();
         }
 
         private void btnDrivers_Click(object sender, EventArgs e)
@@ -70,7 +61,21 @@ namespace CCAPIapp.Forms
             var driverAdminForm = new DriverAdminForm();
             driverAdminForm.Owner = this; // передаём текущую форму как Owner
             driverAdminForm.Show();
-            this.Hide();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var transportationCompanyAdminForm = new TransportationCompanyAdminForm();
+            transportationCompanyAdminForm.Owner = this; // передаём текущую форму как Owner
+            transportationCompanyAdminForm.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var transportationAdminForm = new TransportationAdminForm();
+            transportationAdminForm.Owner = this; // передаём текущую форму как Owner
+            transportationAdminForm.Show();
         }
     }
 }
+

@@ -54,13 +54,21 @@ namespace CCAPIapp.Forms.AdminsForms
             {
                 MessageBox.Show("Водитель успешно добавлен");
                 await LoadDriversAsync();
+                ClearForm();
             }
             else
             {
                 MessageBox.Show("Ошибка при добавлении водителя");
             }
         }
-
+        private void ClearForm()
+        {
+            txtFirstName.Clear();
+            txtLastName.Clear();
+            txtLicenseNum.Clear();
+            txtPhoneNumber.Clear();
+            errorProvider.Clear(); // очищаем ошибки валидации
+        }
         private async void btnEdit_Click(object sender, EventArgs e)
         {
             if (dataGridViewDrivers.SelectedRows.Count == 0)
