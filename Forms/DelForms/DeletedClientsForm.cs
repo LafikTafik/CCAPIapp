@@ -40,7 +40,7 @@ namespace CCAPIapp.Forms.DelForms
             if (await _api.RestoreAsync(selectedId))
             {
                 MessageBox.Show("Клиент успешно восстановлен");
-                LoadDeletedClientsAsync();
+                await LoadDeletedClientsAsync();
             }
             else
             {

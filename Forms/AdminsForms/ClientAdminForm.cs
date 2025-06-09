@@ -127,7 +127,7 @@ namespace CCAPIapp.Forms.AdminsForms
         {
             if (this.Owner != null)
             {
-                this.Owner.Show(); // показываем AdminForm
+                this.Owner.Show();
             }
 
             this.Hide();
@@ -245,7 +245,7 @@ namespace CCAPIapp.Forms.AdminsForms
             txtEmail.Clear();
             txtAddress.Clear();
 
-            errorProvider.Clear(); // очищаем ошибки валидации
+            errorProvider.Clear(); 
         }
     }
 }

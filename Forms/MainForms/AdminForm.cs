@@ -35,14 +35,14 @@ namespace CCAPIapp.Forms
         private void btnOrders_Click(object sender, EventArgs e)
         {
             var orderAdminForm = new OrderAdminForm();
-            orderAdminForm.Owner = this; // передаём текущую форму как Owner
+            orderAdminForm.Owner = this; 
             orderAdminForm.Show();
         }
 
         private void btnCargos_Click(object sender, EventArgs e)
         {
             var сargoAdminForm = new CargoAdminForm();
-            сargoAdminForm.Owner = this; // передаём текущую форму как Owner
+            сargoAdminForm.Owner = this; 
             сargoAdminForm.Show();
         }
 
@@ -59,21 +59,21 @@ namespace CCAPIapp.Forms
         private void btnDrivers_Click(object sender, EventArgs e)
         {
             var driverAdminForm = new DriverAdminForm();
-            driverAdminForm.Owner = this; // передаём текущую форму как Owner
+            driverAdminForm.Owner = this; 
             driverAdminForm.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             var transportationCompanyAdminForm = new TransportationCompanyAdminForm();
-            transportationCompanyAdminForm.Owner = this; // передаём текущую форму как Owner
+            transportationCompanyAdminForm.Owner = this; 
             transportationCompanyAdminForm.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             var transportationAdminForm = new TransportationAdminForm();
-            transportationAdminForm.Owner = this; // передаём текущую форму как Owner
+            transportationAdminForm.Owner = this; 
             transportationAdminForm.Show();
         }
     }

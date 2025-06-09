@@ -148,9 +148,9 @@ namespace CCAPIapp.Forms.AdminsForms
             this.Hide();
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            LoadTransportationsAsync();
+            await LoadTransportationsAsync();
         }
 
         private void btnViewDeleted_Click(object sender, EventArgs e)
@@ -171,7 +171,6 @@ namespace CCAPIapp.Forms.AdminsForms
             errorProvider.Clear();
             bool isValid = true;
 
-            // Проверка CargoId
             if (!int.TryParse(txtCargoId.Text, out var cargoId) || cargoId <= 0)
             {
                 errorProvider.SetError(txtCargoId, "Должно быть целым положительным числом");
@@ -179,7 +178,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Проверка VehicleId
             if (!int.TryParse(txtVehicleId.Text, out var vehicleId) || vehicleId <= 0)
             {
                 errorProvider.SetError(txtVehicleId, "Должно быть целым положительным числом");
@@ -187,7 +185,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Проверка начальной точки
             if (string.IsNullOrWhiteSpace(txtStartPoint.Text))
             {
                 errorProvider.SetError(txtStartPoint, "Поле не может быть пустым");
@@ -195,7 +192,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Проверка конечной точки
             if (string.IsNullOrWhiteSpace(txtEndPoint.Text))
             {
                 errorProvider.SetError(txtEndPoint, "Поле не может быть пустым");
@@ -261,7 +257,7 @@ namespace CCAPIapp.Forms.AdminsForms
             if (await _transCompApi.CreateAsync(dto))
             {
                 MessageBox.Show("Компания успешно добавлена к перевозке");
-                await LoadCompaniesForTransportation(selectedTransportationId); // обновляем список
+                await LoadCompaniesForTransportation(selectedTransportationId);
             }
             else
             {

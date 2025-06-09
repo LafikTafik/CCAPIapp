@@ -59,7 +59,7 @@ namespace CCAPIapp.Forms.DelForms
                 if (await _api.RestoreAsync(selectedVehicle.ID))
                 {
                     MessageBox.Show("Транспорт успешно восстановлен", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    await LoadDeletedVehiclesAsync(); // обновляем таблицу
+                    await LoadDeletedVehiclesAsync(); 
                 }
                 else
                 {

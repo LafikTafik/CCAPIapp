@@ -24,7 +24,7 @@ namespace CCAPIapp
 
         private async Task LoadDataAsync()
         {
-            // Клиенты
+      
             var clients = await _clientApi.GetAllAsync();
 
             var displayClients = clients.Select(c => new
@@ -37,19 +37,19 @@ namespace CCAPIapp
             cmbClients.DisplayMember = "DisplayText";
             cmbClients.ValueMember = "ID";
 
-            // Компании
+         
             var companies = await _companyApi.GetAllAsync();
             cmbCompanies.DataSource = companies;
             cmbCompanies.DisplayMember = "Name";
             cmbCompanies.ValueMember = "ID";
 
-            // Грузы
+         
             var cargos = await _cargoApi.GetAllAsync();
             cmbCargos.DataSource = cargos;
             cmbCargos.DisplayMember = "Descriptions";
             cmbCargos.ValueMember = "ID";
 
-            // Транспорты
+            
             var vehicles = await _vehicleApi.GetAllAsync();
 
             var displayVehicles = vehicles.Select(v => new

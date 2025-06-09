@@ -33,7 +33,7 @@ namespace CCAPIapp.Forms.DelForms
             if (await _api.RestoreAsync(selected.ID))
             {
                 MessageBox.Show("Водитель восстановлен");
-                await LoadDeletedDriversAsync(); // обновляем список
+                await LoadDeletedDriversAsync(); 
             }
             else
             {

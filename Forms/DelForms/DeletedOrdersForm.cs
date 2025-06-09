@@ -41,7 +41,7 @@ namespace CCAPIapp.Forms.DelForms
             if (await _api.RestoreAsync(selectedId))
             {
                 MessageBox.Show("Заказ успешно восстановлен");
-                await LoadDeletedOrdersAsync(); // обновляем таблицу
+                await LoadDeletedOrdersAsync(); 
             }
             else
             {

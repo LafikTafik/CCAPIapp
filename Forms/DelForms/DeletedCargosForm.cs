@@ -41,7 +41,7 @@ namespace CCAPIapp.Forms.DelForms
             if (await _api.RestoreAsync(selectedId))
             {
                 MessageBox.Show("Груз успешно восстановлен");
-                await LoadDeletedCargosAsync(); // обновляем таблицу
+                await LoadDeletedCargosAsync();
             }
             else
             {

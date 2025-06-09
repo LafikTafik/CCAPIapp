@@ -130,11 +130,11 @@ namespace CCAPIapp.Forms.AdminsForms
             }
         }
 
-        private void btnViewDeleted_Click(object sender, EventArgs e)
+        private async void btnViewDeleted_Click(object sender, EventArgs e)
         {
             var form = new DeletedVehiclesForm();
             form.ShowDialog();
-            LoadVehiclesAsync();
+            await LoadVehiclesAsync();
         }
 
         private async void btnRefresh_Click(object sender, EventArgs e)
@@ -172,10 +172,10 @@ namespace CCAPIapp.Forms.AdminsForms
 
         private bool ValidateVehicleFields()
         {
-            errorProvider.Clear(); // Очищаем предыдущие ошибки
+            errorProvider.Clear(); 
             bool isValid = true;
 
-            // Грузоподъемность - только число > 0
+            
             if (!decimal.TryParse(txtCapacity.Text, out var capacity) || capacity <= 0)
             {
                 errorProvider.SetError(txtCapacity, "Должно быть положительным числом");
@@ -184,7 +184,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // ID Водителя - только положительное число
+            
             if (!int.TryParse(txtDriverId.Text, out var driverId) || driverId <= 0)
             {
                 errorProvider.SetError(txtDriverId, "Должно быть положительным числом");
@@ -193,7 +193,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Номер ТС: формат А123БВ (1 буква + 3 цифры + 2 буквы)
+            
             var vehicleNum = txtVehicleNum.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(vehicleNum))

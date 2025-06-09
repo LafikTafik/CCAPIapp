@@ -67,7 +67,7 @@ namespace CCAPIapp.Forms.AdminsForms
             txtLastName.Clear();
             txtLicenseNum.Clear();
             txtPhoneNumber.Clear();
-            errorProvider.Clear(); // очищаем ошибки валидации
+            errorProvider.Clear(); 
         }
         private async void btnEdit_Click(object sender, EventArgs e)
         {
@@ -134,11 +134,11 @@ namespace CCAPIapp.Forms.AdminsForms
             }
         }
 
-        private void btnViewDeleted_Click(object sender, EventArgs e)
+        private async void btnViewDeleted_Click(object sender, EventArgs e)
         {
             var form = new DeletedDriversForm();
             form.ShowDialog();
-            LoadDriversAsync();
+            await LoadDriversAsync();
         }
 
         private async void btnRefresh_Click(object sender, EventArgs e)
@@ -188,10 +188,9 @@ namespace CCAPIapp.Forms.AdminsForms
         private ErrorProvider errorProvider = new ErrorProvider();
         private bool ValidateDriverFields()
         {
-            errorProvider.Clear(); // Очистка предыдущих ошибок
+            errorProvider.Clear(); 
             bool isValid = true;
 
-            // Имя
             if (string.IsNullOrWhiteSpace(txtFirstName.Text))
             {
                 errorProvider.SetError(txtFirstName, "Имя обязательно");
@@ -214,7 +213,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Фамилия
             if (string.IsNullOrWhiteSpace(txtLastName.Text))
             {
                 errorProvider.SetError(txtLastName, "Фамилия обязательна");
@@ -237,7 +235,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Номер лицензии — ровно 10 цифр
             var license = txtLicenseNum.Text.Replace(" ", "");
 
             if (string.IsNullOrWhiteSpace(license))
@@ -255,7 +252,6 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Телефон — 11 или 12 цифр
             var phone = txtPhoneNumber.Text.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "");
 
             if (string.IsNullOrWhiteSpace(phone))

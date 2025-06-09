@@ -44,7 +44,7 @@ namespace CCAPIapp.Forms.DelForms
             if (await restoreApi.RestoreAsync(selected.ID))
             {
                 MessageBox.Show("Перевозка восстановлена");
-                await LoadDeletedTransportationsAsync(); // перезагрузим список удалённых
+                await LoadDeletedTransportationsAsync(); 
             }
             else
             {

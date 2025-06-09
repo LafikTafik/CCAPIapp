@@ -129,7 +129,7 @@ namespace CCAPIapp.Forms.AdminsForms
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.Owner?.Show(); // показываем предыдущую форму
+            this.Owner?.Show(); 
             this.Hide();
         }
 
@@ -146,7 +146,7 @@ namespace CCAPIapp.Forms.AdminsForms
 
         private void TransportationCompanyAdminForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Environment.Exit(0); // выход из приложения при закрытии формы
+            Environment.Exit(0); 
         }
 
         private ErrorProvider errorProvider = new ErrorProvider();
@@ -156,7 +156,7 @@ namespace CCAPIapp.Forms.AdminsForms
             errorProvider.Clear();
             bool isValid = true;
 
-            // Проверка названия
+            
             if (string.IsNullOrWhiteSpace(txtName.Text))
             {
                 errorProvider.SetError(txtName, "Название обязательно");
@@ -170,7 +170,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Проверка телефона
+            
             if (!string.IsNullOrWhiteSpace(txtPhone.Text) &&
                 !System.Text.RegularExpressions.Regex.IsMatch(txtPhone.Text, @"^\+?[0-9\- ]+$"))
             {

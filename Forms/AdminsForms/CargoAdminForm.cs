@@ -67,7 +67,7 @@ namespace CCAPIapp.Forms.AdminsForms
             txtDimensions.Clear();
             txtDescription.Clear();
 
-            errorProvider.Clear(); // очищаем ошибки валидации
+            errorProvider.Clear(); 
         }
 
         private async void btnEditCargo_Click(object sender, EventArgs e)
@@ -139,11 +139,11 @@ namespace CCAPIapp.Forms.AdminsForms
             await LoadCargosAsync();
         }
 
-        private void btnViewDeleted_Click(object sender, EventArgs e)
+        private async void btnViewDeleted_Click(object sender, EventArgs e)
         {
             var form = new DeletedCargosForm();
             form.ShowDialog();
-            LoadCargosAsync();
+            await LoadCargosAsync();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -174,10 +174,10 @@ namespace CCAPIapp.Forms.AdminsForms
 
         private bool ValidateCargoFields()
         {
-            errorProvider.Clear(); // Очистка предыдущих ошибок
+            errorProvider.Clear(); 
             bool isValid = true;
 
-            // Вес груза — должен быть числом > 0
+            
             if (!decimal.TryParse(txtWeight.Text, out var weight) || weight <= 0)
             {
                 errorProvider.SetError(txtWeight, "Вес должен быть положительным числом");
@@ -186,7 +186,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 isValid = false;
             }
 
-            // Габариты — формат: "100*200*300"
+            
             var dimensions = txtDimensions.Text.Replace(" ", "");
 
             var parts = dimensions.Split('*');

@@ -139,7 +139,7 @@ namespace CCAPIapp.Forms.AdminsForms
             this.Hide();
             if (this.Owner != null)
             {
-                this.Owner.Show(); // показываем AdminForm
+                this.Owner.Show(); 
             }
         }
 
@@ -179,7 +179,7 @@ namespace CCAPIapp.Forms.AdminsForms
         {
             if (this.Owner != null)
             {
-                this.Owner.Show(); // показываем AdminForm
+                this.Owner.Show(); 
             }
 
             this.Hide();
@@ -258,7 +258,7 @@ namespace CCAPIapp.Forms.AdminsForms
             if (await _cargoOrderApi.CreateAsync(dto))
             {
                 MessageBox.Show("Груз успешно добавлен к заказу");
-                await LoadCargosForOrder(selectedOrderId); // обновляем список грузов
+                await LoadCargosForOrder(selectedOrderId); 
             }
             else
             {
@@ -269,7 +269,6 @@ namespace CCAPIapp.Forms.AdminsForms
         {
             var items = await _cargoOrderApi.GetByOrderIdAsync(orderId);
 
-            // Здесь можно обновить другой DataGridView или просто вывести сообщение
             foreach (var item in items)
             {
                 Console.WriteLine($"Заказ {item.OrderID} связан с грузом {item.CargoID}");

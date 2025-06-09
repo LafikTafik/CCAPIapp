@@ -47,7 +47,7 @@ namespace CCAPIapp.Forms.DelForms
                 if (await restoreApi.RestoreAsync(selected.ID))
                 {
                     MessageBox.Show("Компания успешно восстановлена");
-                    await LoadDeletedCompaniesAsync(); // обновляем таблицу
+                    await LoadDeletedCompaniesAsync(); 
                 }
                 else
                 {
