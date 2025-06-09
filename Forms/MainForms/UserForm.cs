@@ -79,7 +79,7 @@ namespace CCAPIapp
                     Surname = txtSurname.Text.Trim(),
                     Phone = txtPhone.Text.Trim(),
                     Email = txtEmail.Text.Trim(),
-                    Address = txtAddress.Text.Trim()
+                    Adress = txtAddress.Text.Trim()
                 };
 
                 if (!await _clientApi.CreateAsync(newClient))

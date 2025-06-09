@@ -7,7 +7,7 @@ namespace CCAPIapp.Services
 {
     public class ApiService<T> where T : class
     {
-        
+
         public readonly HttpClient _client;
         public readonly string _endpoint;
 
@@ -80,20 +80,7 @@ namespace CCAPIapp.Services
             }
             return new List<TransCompDto>();
         }
-        public async Task<bool> CreateAsync(TransCompDto dto)
-        {
-            try
-            {
-                var response = await _client.PostAsJsonAsync(_endpoint, dto);
-                response.EnsureSuccessStatusCode();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при добавлении компании: {ex.Message}");
-                return false;
-            }
-        }
+        
 
     }
 }

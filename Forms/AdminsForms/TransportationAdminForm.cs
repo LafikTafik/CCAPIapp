@@ -268,14 +268,6 @@ namespace CCAPIapp.Forms.AdminsForms
         private async Task LoadCompaniesForTransportation(int transportationId)
         {
             var companiesInTransportation = await _transCompApi.GetByTransportationIdAsync(transportationId);
-            if (companiesInTransportation.Count == 0)
-            {
-                MessageBox.Show("Нет связанных компаний для этой перевозки");
-            }
-            else
-            {
-                MessageBox.Show($"Найдено {companiesInTransportation.Count} компаний");
-            }
         }
     }
 }

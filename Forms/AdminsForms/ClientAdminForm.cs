@@ -42,7 +42,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 Surname = txtSurname.Text,
                 Phone = txtPhone.Text,
                 Email = txtEmail.Text,
-                Address = txtAddress.Text
+                Adress = txtAddress.Text
             };
 
             if (await _api.CreateAsync(client))
@@ -84,7 +84,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 Surname = txtSurname.Text,
                 Phone = txtPhone.Text,
                 Email = txtEmail.Text,
-                Address = txtAddress.Text
+                Adress = txtAddress.Text
             };
 
             if (await _api.UpdateAsync(originalClient.ID, updatedClient))
@@ -149,7 +149,7 @@ namespace CCAPIapp.Forms.AdminsForms
                 txtSurname.Text = client.Surname;
                 txtPhone.Text = client.Phone;
                 txtEmail.Text = client.Email;
-                txtAddress.Text = client.Address;
+                txtAddress.Text = client.Adress;
             }
         }
 
